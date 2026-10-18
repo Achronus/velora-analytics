@@ -1,1 +1,1 @@
-# velora-analytics
+# Velora Analytics
