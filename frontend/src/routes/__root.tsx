@@ -1,4 +1,4 @@
-import { SiteHeader } from "@/components/site-header"
+import { SiteHeader } from "@/components/SiteHeader"
 import { Outlet, createRootRoute } from "@tanstack/react-router"
 
 export const Route = createRootRoute({

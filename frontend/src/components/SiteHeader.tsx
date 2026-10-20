@@ -1,21 +1,13 @@
-import { cn } from "@/lib/utils"
+import LiveDot from "@/components/LiveDot"
+import ScenarioCommandMenu from "@/components/ScenarioCommandMenu"
+import { Route as CampaignsRoute } from "@/routes/campaigns"
+import { Route as ConfigsRoute } from "@/routes/configs"
 import { Route as DashboardsRoute } from "@/routes/dashboards/index"
 import { Route as LiveRoute } from "@/routes/live"
+import { Route as MonitoringRoute } from "@/routes/monitoring"
 import { Route as PlaybackRoute } from "@/routes/playback"
 import { Route as TelemetryRoute } from "@/routes/telemetry"
 import { Link, linkOptions } from "@tanstack/react-router"
-
-const LiveDot = ({ running }: { running: boolean }) => {
-  return (
-    <span
-      aria-hidden="true"
-      className={cn(
-        "size-1.5 shrink-0 rounded-full",
-        running ? "bg-live-on motion-safe:animate-live" : "bg-live-off"
-      )}
-    />
-  )
-}
 
 export const SiteHeader = ({ running = false }: { running?: boolean }) => {
   const navItems = linkOptions([
@@ -23,13 +15,19 @@ export const SiteHeader = ({ running = false }: { running?: boolean }) => {
     { label: "Dashboards", to: DashboardsRoute.to, live: false },
     { label: "Telemetry", to: TelemetryRoute.to, live: false },
     { label: "Playback", to: PlaybackRoute.to, live: false },
+    { label: "Campaigns", to: CampaignsRoute.to, live: false },
+    { label: "Monitoring", to: MonitoringRoute.to, live: false },
+    { label: "Configs", to: ConfigsRoute.to, live: false },
   ])
 
   return (
     <header className="sticky top-0 z-50 flex h-20 gap-5 border-b border-line px-4">
-      <Link to="/" className="flex shrink-0 items-center">
-        <img src="/logo.png" alt="Logo" className="h-8 w-auto" />
-      </Link>
+      <div className="my-4 flex shrink-0 items-center gap-5 border-r pr-5">
+        <Link to="/">
+          <img src="/icon-dark.png" alt="Logo" className="h-8 w-auto" />
+        </Link>
+        <ScenarioCommandMenu />
+      </div>
 
       <nav aria-label="Primary" className="mt-1 flex">
         {navItems.map((link) => (
@@ -45,7 +43,7 @@ export const SiteHeader = ({ running = false }: { running?: boolean }) => {
                 "border-transparent text-neutral-500 hover:text-foreground",
             }}
           >
-            {link.live && <LiveDot running={running} />}
+            {link.live && <LiveDot active={running} />}
             {link.label}
           </Link>
         ))}
