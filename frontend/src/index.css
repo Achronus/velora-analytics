@@ -56,15 +56,15 @@
   --radius-4xl: calc(var(--radius) * 2.6);
 
   /* ---- Surfaces and text ---- */
-  --color-bg: #0a0c0f; /* page */
+  --color-main: #0a0c0f; /* page */
   --color-panel: #0e1115; /* cards, side panels */
   --color-raised: #141920; /* selected row, hover */
   --color-line: #1c2128; /* dividers, header rule */
   --color-line-soft: #171b21; /* row separators inside cards */
   --color-line-strong: #2c333d; /* outlined buttons, inputs */
   --color-text: #e7eaee;
-  --color-text-dim: #a9b1bb; /* secondary text */
-  --color-text-mute: #6e7781; /* labels, axis ticks (≥4.5:1 on bg) */
+  --color-dim: #a9b1bb; /* secondary text */
+  --color-mute: #6e7781; /* labels, axis ticks (≥4.5:1 on bg) */
 
   /* ---- status: threshold colouring ---- */
   /* base = outlines/lines, -fg = text on dark, -fill = part fill in diagrams */

@@ -1,4 +1,6 @@
+import SearchDialog from "@/components/SearchDialog"
 import { SiteHeader } from "@/components/SiteHeader"
+import SearchMenuProvider from "@/contexts/SearchMenuProvider"
 import { Outlet, createRootRoute } from "@tanstack/react-router"
 
 export const Route = createRootRoute({
@@ -8,8 +10,11 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <>
-      <SiteHeader />
-      <Outlet />
+      <SearchMenuProvider>
+        <SiteHeader />
+        <Outlet />
+        <SearchDialog />
+      </SearchMenuProvider>
     </>
   )
 }
