@@ -2,16 +2,16 @@ import LiveDot from "@/components/LiveDot"
 import { NAV_ITEMS } from "@/lib/constants"
 
 import { Link } from "@tanstack/react-router"
-import MissionSwitcherButton from "./MissionSwitcherButton"
+import ScopeBreadcrumb from "./ScopeBreadcrumb"
 
 export const SiteHeader = ({ running = false }: { running?: boolean }) => {
   return (
     <header className="sticky top-0 z-50 flex h-20 gap-5 border-b border-line px-4">
       <div className="my-4 flex shrink-0 items-center gap-5 border-r pr-5">
         <Link to="/">
-          <img src="/icon-dark.png" alt="Logo" className="h-8 w-auto" />
+          <img src="/icon-dark.png" alt="Home" className="h-8 w-auto" />
         </Link>
-        <MissionSwitcherButton />
+        <ScopeBreadcrumb />
       </div>
 
       <nav aria-label="Primary" className="mt-1 flex">
