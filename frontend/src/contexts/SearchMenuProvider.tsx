@@ -1,14 +1,21 @@
+import type { Filter } from "@/lib/types"
 import { useCallback, useEffect, useMemo, useState } from "react"
-import { SearchMenuContext } from "./SearchMenuContext"
+import { type ScopeCrumb, SearchMenuContext } from "./SearchMenuContext"
 
 const SearchMenuProvider = ({ children }: { children: React.ReactNode }) => {
   const [open, setOpenState] = useState(false)
   const [query, setQuery] = useState("")
+  const [initialFilter, setInitialFilter] = useState<Filter>("all")
+  const [scope, setScope] = useState<ScopeCrumb[]>([])
 
-  const openMenu = useCallback((initialQuery: string = "") => {
-    setQuery(initialQuery)
-    setOpenState(true)
-  }, [])
+  const openMenu = useCallback(
+    (initialQuery: string = "", filter: Filter = "all") => {
+      setQuery(initialQuery)
+      setInitialFilter(filter)
+      setOpenState(true)
+    },
+    []
+  )
 
   const closeMenu = useCallback(() => {
     setQuery("")
@@ -34,8 +41,18 @@ const SearchMenuProvider = ({ children }: { children: React.ReactNode }) => {
   }, [open, openMenu, closeMenu])
 
   const value = useMemo(
-    () => ({ open, query, setQuery, openMenu, closeMenu, setOpen }),
-    [open, query, openMenu, closeMenu, setOpen]
+    () => ({
+      open,
+      query,
+      setQuery,
+      initialFilter,
+      openMenu,
+      closeMenu,
+      setOpen,
+      scope,
+      setScope,
+    }),
+    [open, query, initialFilter, openMenu, closeMenu, setOpen, scope]
   )
 
   return <SearchMenuContext value={value}>{children}</SearchMenuContext>

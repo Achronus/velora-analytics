@@ -1,4 +1,6 @@
-import type { Preview } from "@/features/CommandSearch/types"
+export type ID = string
+export type ISODate = string
+export type Param = number | string | boolean
 
 export type ModuleFormat =
   | "mission"
@@ -9,18 +11,23 @@ export type ModuleFormat =
   | "episode"
   | "channel"
 
+export type Filter = ModuleFormat | "all"
+
 export type Status =
   "success" | "marginal" | "fail" | "running" | "complete" | "active"
+
+export type RunStatus =
+  "queued" | "running" | "complete" | "failed" | "cancelled"
+
+export type EpisodeOutcome = "success" | "marginal" | "fail" | "sim_fault"
+
+export type CheckpointRef = { runId: ID; step: number }
 
 export type NavItems = {
   label: string
   to: string
   live?: boolean
 }
-
-type ID = string
-type ISODate = string
-type Param = number | string | boolean
 
 /* -------- Hierarchy -------- */
 
@@ -39,8 +46,6 @@ export type Campaigns = {
   description?: string
   createdAt: ISODate
 }
-
-type RunStatus = "queued" | "running" | "complete" | "failed" | "cancelled"
 
 type RunBase = {
   id: ID
@@ -70,8 +75,6 @@ export type EvalRun = RunBase & {
 
 export type Run = TrainRun | EvalRun
 
-export type CheckpointRef = { runId: ID; step: number }
-
 /* -------- Episode -------- */
 
 export type Episode = {
@@ -79,7 +82,7 @@ export type Episode = {
   runId: ID
   index: number
   status: "running" | "done"
-  outcome?: "success" | "marginal" | "fail" | "sim_fault"
+  outcome?: EpisodeOutcome
   env: EnvInfo
   agents: AgentInfo[]
   startedAt: ISODate
@@ -129,31 +132,3 @@ export type Requirement = {
 }
 
 export type RequirementResult = { id: string; met: boolean; observed: number }
-
-/* -------- Search -------- */
-
-export type SearchItemOwner = {
-  mission: string
-  campaign?: string
-  agent?: string
-  environment?: string
-  episode?: string
-}
-
-export type SearchItem = {
-  module: ModuleFormat
-  id: ID // Unique identifier such as "CA-0419", "MC-031"
-  name: string // Name of the item
-  desc: string // Secondary line with additional details
-  href: string
-  colour?: string
-  status?: Status
-  owner: SearchItemOwner
-  preview: Preview
-}
-
-export type CommandGroupResult = {
-  id: string
-  heading: string
-  items: SearchItem[]
-}
