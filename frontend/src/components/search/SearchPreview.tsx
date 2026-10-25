@@ -21,7 +21,7 @@ const FACT_TONE: Record<Tone, string> = {
 
 type Props = {
   hit: SearchHit
-  onOpen: (href: string) => void
+  onOpen: (href?: string) => void
 }
 
 const SearchPreview = ({ hit, onOpen }: Props) => {
@@ -82,7 +82,7 @@ const SearchPreview = ({ hit, onOpen }: Props) => {
                   key={a.label}
                   size="sm"
                   variant={i === 0 ? "default" : "outline"}
-                  onClick={() => onOpen(a.href)}
+                  onClick={() => onOpen(a.key === "↵" ? undefined : a.href)}
                   className={cn(
                     "h-8 cursor-pointer gap-1.5 rounded-[7px] px-3 text-[13px]",
                     i === 0 ? "font-semibold" : "font-normal"

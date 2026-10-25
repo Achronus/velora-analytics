@@ -12,7 +12,7 @@ import {
 import type { SearchHit } from "@/lib/search/types"
 import type { Filter, ModuleFormat } from "@/lib/types"
 import { cn } from "@/lib/utils"
-import { useNavigate } from "@tanstack/react-router"
+import { useLocation, useNavigate } from "@tanstack/react-router"
 import { ArrowRight, LoaderCircle } from "lucide-react"
 import { useMemo, useRef, useState } from "react"
 import FilterTab from "./search/FilterTab"
@@ -53,7 +53,7 @@ const keepKeysLocal = (e: React.KeyboardEvent) => {
 }
 
 const SearchPanel = () => {
-  const { query, setQuery, closeMenu, initialFilter } = useSearchMenu()
+  const { query, setQuery, closeMenu, initialFilter, scope } = useSearchMenu()
   const { mission, attachMission, clearMission, moveBreadcrumbTo } =
     useSearchScope()
   const navigate = useNavigate()
@@ -61,6 +61,14 @@ const SearchPanel = () => {
 
   const [filter, setFilter] = useState<Filter>(initialFilter)
   const [active, setActive] = useState("")
+
+  const plotted = useLocation({
+    select: (l) =>
+      String((l.search as Record<string, unknown>).plot ?? "")
+        .split(",")
+        .filter(Boolean),
+  })
+  const hrefCtx = { scope, plotted }
 
   const q = useDebouncedValue(query.trim(), 120)
   const { data, isPending, isError, isFetching } = useSearchResults(
@@ -109,7 +117,7 @@ const SearchPanel = () => {
   }
 
   /** ↵ on anything else (or a preview action): go there, and the breadcrumb follows. */
-  const go = (hit: SearchHit, href = hrefOf(hit)) => {
+  const go = (hit: SearchHit, href = hrefOf(hit, hrefCtx)) => {
     moveBreadcrumbTo(hit)
     closeMenu()
     navigate({ href })
@@ -122,7 +130,7 @@ const SearchPanel = () => {
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && activeHit) {
       e.preventDefault()
-      window.open(hrefOf(activeHit), "_blank", "noopener")
+      window.open(hrefOf(activeHit, hrefCtx), "_blank", "noopener")
     }
   }
 

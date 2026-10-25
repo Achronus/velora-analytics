@@ -4,7 +4,8 @@ import type { Crumb, SearchHit } from "@/lib/search/types"
 import { useState } from "react"
 import { toCrumb } from "@/lib/search/utils"
 import type { ScopeCrumb } from "@/contexts/SearchMenuContext"
-import { rowOf } from "@/lib/search/registry"
+import { channelTarget, rowOf } from "@/lib/search/registry"
+import { runColourClass } from "@/lib/utils"
 
 const BREADCRUMB_LEVELS: ModuleFormat[] = [
   "mission",
@@ -13,6 +14,8 @@ const BREADCRUMB_LEVELS: ModuleFormat[] = [
   "episode",
 ]
 
+const LIBRARY_ITEMS: ModuleFormat[] = ["agent", "environment"]
+
 /**
  * "Where you are" logic for the search dialog. Decides what the header breadcrumb displays
  *
@@ -20,7 +23,11 @@ const BREADCRUMB_LEVELS: ModuleFormat[] = [
  *   opens. Removing it widens only this search.
  * - `attachMission(hit)`: ↵ on a mission. Sets the chip and moves the breadcrumb to that mission.
  * - `clearMission()`: × on the chip, or Backspace in an empty box.
- * - `moveBreadcrumbTo(hit)`: opening anything else. Campaigns, runs and episodes become the new location
+ * - `moveBreadcrumbTo(hit)`: opening anything else.
+ *  *     campaign / run / episode → its full chain:   mission / MC-031 / EV-0311 / CA-0419
+ *     agent / environment      → mission + item:   mission / AG-07   (you've left the campaign chain)
+ *     channel                  → keep the current location (it's data from the run you're on),
+ *                                unless it belongs to another mission
  */
 export const useSearchScope = () => {
   const { scope, setScope } = useSearchMenu()
@@ -40,19 +47,38 @@ export const useSearchScope = () => {
   }
 
   const moveBreadcrumbTo = (hit: SearchHit) => {
+    const here: ScopeCrumb = {
+      ...toCrumb(hit),
+      chip: rowOf(hit).chip?.className,
+    }
+    const hitMission = hit.path.find((c) => c.module === "mission")
+
     if (BREADCRUMB_LEVELS.includes(hit.module)) {
       const parents = hit.path.filter((c) =>
         BREADCRUMB_LEVELS.includes(c.module)
       )
-      const here: ScopeCrumb = {
-        ...toCrumb(hit),
-        chip: rowOf(hit).chip?.className,
-      }
       setScope([...parents, here])
       return
     }
 
-    const hitMission = hit.path[0]
+    if (LIBRARY_ITEMS.includes(hit.module)) {
+      setScope(hitMission ? [hitMission, here] : [here])
+      return
+    }
+
+    if (hit.module === "channel") {
+      const target = channelTarget(hit, { scope }).scope
+      // keep existing crumbs (they carry their colour); colour a newly reached episode
+      setScope(
+        target.map((c, i) =>
+          i === target.length - 1 && c.module === "episode" && !("chip" in c)
+            ? { ...c, chip: runColourClass(c.id) }
+            : c
+        )
+      )
+      return
+    }
+
     if (hitMission && hitMission.id !== scope[0]?.id) setScope([hitMission])
   }
 

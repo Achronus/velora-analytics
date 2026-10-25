@@ -6,7 +6,7 @@
 
    Then swap them to fetch() once /api/v1/search and the preview endpoint are live. */
 
-import { MODULE_ORDER, MODULE_REGISTRY, hrefOf } from "@/lib/search/registry"
+import { MODULE_ORDER, MODULE_REGISTRY } from "@/lib/search/registry"
 import type {
   Crumb,
   PreviewData,
@@ -111,10 +111,7 @@ const ENTER = (label: string) => ({ label, href: "", key: "↵" })
 
 const add = (hit: SearchHit, preview: PreviewData) => {
   HITS.push(hit)
-  const actions = preview.actions?.map((a) =>
-    a.key === "↵" ? { ...a, href: hrefOf(hit) } : a
-  )
-  PREVIEWS.set(previewKey(hit.module, hit.id), { ...preview, actions })
+  PREVIEWS.set(previewKey(hit.module, hit.id), preview)
 }
 
 /* ---------- missions ---------- */
@@ -757,6 +754,12 @@ for (const c of CHANNELS) {
         source: c.id.startsWith("policy.") ? "agent" : "env",
         level: c.level,
         validated: !unvalidated,
+        latestEpisode: [
+          MISSION,
+          campaignCrumb("MC-031"),
+          evalCrumb("MC-031"),
+          { module: "episode", id: "CA-0419", name: "fragment 0.3 m · 12 m/s" },
+        ],
       },
     },
     {
@@ -791,6 +794,10 @@ for (const c of CHANNELS) {
       note: `${c.desc}. Opens in Telemetry scoped to the selected run.`,
       actions: [
         ENTER("Plot in Telemetry"),
+        {
+          label: "Compare across episodes",
+          href: `/m/${CA}/c/MC-031/r/EV-0311/episodes?channel=${encodeURIComponent(c.id)}`,
+        },
         {
           label: "Edit rule",
           href: `/monitoring?rule=${encodeURIComponent(c.id)}`,

@@ -10,7 +10,9 @@ import {
 import { runColourClass } from "../utils"
 import { LEVEL_CHIP, LEVEL_TONE, STATUS_TONE } from "../constants"
 import {
+  type Crumb,
   type HitOf,
+  type HrefContext,
   type ModuleSpec,
   type RowDisplay,
   type SearchHit,
@@ -192,12 +194,7 @@ export const MODULE_REGISTRY: { [M in ModuleFormat]: ModuleSpec<M> } = {
           : undefined,
       }
     },
-    href: (h) =>
-      buildEntityPath(
-        h.path,
-        undefined,
-        `/telemetry?plot=${encodeURIComponent(h.id)}`
-      ),
+    href: (h, ctx) => channelTarget(h, ctx).href,
     Preview: preview<"channel">(),
   },
 }
@@ -210,7 +207,45 @@ export const getModuleSpec = <M extends ModuleFormat>(
 
 export const rowOf = (hit: SearchHit): RowDisplay => getModuleSpec(hit).row(hit)
 
-export const hrefOf = (hit: SearchHit): string => getModuleSpec(hit).href(hit)
+export const hrefOf = (hit: SearchHit, ctx: HrefContext): string =>
+  getModuleSpec(hit).href(hit, ctx)
 
 export const hitKey = (groupKey: string, hit: SearchHit) =>
   `${groupKey}:${hit.module}:${hit.id}`
+
+export const channelTarget = (
+  h: HitOf<"channel">,
+  { scope, plotted = [] }: HrefContext
+): { href: string; scope: Crumb[] } => {
+  const id = encodeURIComponent(h.id)
+  const plot = (already: string[]) =>
+    `?plot=${[...new Set([...already, h.id])].map(encodeURIComponent).join(",")}`
+
+  const here = scope[0]?.id === h.path[0]?.id ? scope : [] // a location in another mission doesn't count
+  const last = here.at(-1)?.module
+
+  if (last === "episode")
+    return {
+      href: buildEntityPath(here, undefined, `/telemetry${plot(plotted)}`),
+      scope: here,
+    }
+
+  if (last === "run" || last === "campaign")
+    return {
+      href: buildEntityPath(here, undefined, `/episodes?channel=${id}`),
+      scope: here,
+    }
+
+  const latest = h.data.latestEpisode
+
+  if (latest?.length)
+    return {
+      href: buildEntityPath(latest, undefined, `/telemetry${plot([])}`),
+      scope: latest,
+    }
+
+  return {
+    href: buildEntityPath(h.path, undefined, `/telemetry${plot([])}`),
+    scope: h.path,
+  }
+}

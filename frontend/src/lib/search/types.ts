@@ -64,6 +64,7 @@ export type SearchHitData = {
     source: "env" | "agent" | "reward"
     level?: 0 | 1 | 2
     validated?: boolean
+    latestEpisode?: Crumb[]
   }
 }
 
@@ -91,6 +92,11 @@ export type SearchResponse = {
   counts: Partial<Record<ModuleFormat, number>>
 }
 
+export type HrefContext = {
+  scope: Crumb[]
+  plotted?: string[]
+}
+
 export type Tone = "nominal" | "warn" | "alarm" | "live" | "model" | "neutral"
 
 export type RowDisplay = {
@@ -106,7 +112,7 @@ export type ModuleSpec<M extends ModuleFormat> = {
   label: string
   limit: number
   row: (hit: HitOf<M>) => RowDisplay
-  href: (hit: HitOf<M>) => string
+  href: (hit: HitOf<M>, ctx: HrefContext) => string
   Preview: FC<{ hit: HitOf<M> }>
 }
 
