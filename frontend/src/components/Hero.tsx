@@ -1,6 +1,7 @@
+import { cn } from "@/lib/utils"
 import { Link } from "@tanstack/react-router"
-import HeroSearch from "./HeroSearch"
-import { Badge } from "./ui/badge"
+import SearchBar from "./SearchBar"
+import { badgeVariants } from "./ui/badge"
 
 type Recents = {
   id: string
@@ -20,24 +21,23 @@ const Hero = ({ recents }: HeroProps) => {
       </div>
 
       {/* Search bar */}
-      <HeroSearch />
+      <SearchBar size="lg" className="w-full max-w-180" />
 
       {/* Recent items */}
       <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-mute">
         Recent
         {recents.map((q) => (
-          <Badge
+          <Link
             key={q.id}
-            variant="outline"
-            className="gap-1.5 rounded-full px-2.5 py-1 font-mono font-normal text-dim hover:text-text"
+            to="/playback"
+            className={cn(
+              badgeVariants({ variant: "outline" }),
+              "text-text-dim gap-1.5 rounded-full px-2.5 py-1 font-mono font-normal hover:text-text"
+            )}
           >
-            <Link to="/playback">
-              <span
-                className={`inline-block size-1.75! gap-5 rounded-xs ${q.colour} mr-2`}
-              />
-              {q.id}
-            </Link>
-          </Badge>
+            <span className={cn("size-1.75 rounded-xs", q.colour)} />
+            {q.id}
+          </Link>
         ))}
       </div>
     </div>
