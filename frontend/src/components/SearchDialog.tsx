@@ -1,6 +1,7 @@
 import useDebouncedValue from "@/hooks/useDebouncedValue"
 import { useSearchMenu } from "@/hooks/useSearchMenu"
 import useSearchResults from "@/hooks/useSearchResults"
+import { useSearchScope } from "@/hooks/useSearchScope"
 import {
   hitKey,
   hrefOf,
@@ -16,9 +17,8 @@ import { ArrowRight, LoaderCircle } from "lucide-react"
 import { useMemo, useRef, useState } from "react"
 import FilterTab from "./search/FilterTab"
 import HitRow from "./search/HitRow"
-import PreviewHeader from "./search/PreviewHeader"
-import PreviewOf from "./search/PreviewOf"
 import SearchCommandInput from "./search/SearchCommandInput"
+import SearchPreview from "./search/SearchPreview"
 import {
   Command,
   CommandEmpty,
@@ -39,6 +39,9 @@ import { ToggleGroup } from "./ui/toggle-group"
 const isModule = (key: string): key is ModuleFormat =>
   (MODULE_ORDER as string[]).includes(key)
 
+const isFilter = (v: string | undefined): v is Filter =>
+  v === "all" || (v !== undefined && isModule(v))
+
 const keepKeysLocal = (e: React.KeyboardEvent) => {
   if (
     e.key === "Enter" ||
@@ -50,16 +53,21 @@ const keepKeysLocal = (e: React.KeyboardEvent) => {
 }
 
 const SearchPanel = () => {
-  const { query, setQuery, closeMenu } = useSearchMenu()
+  const { query, setQuery, closeMenu, initialFilter } = useSearchMenu()
+  const { mission, attachMission, clearMission, moveBreadcrumbTo } =
+    useSearchScope()
   const navigate = useNavigate()
-
-  const [filter, setFilter] = useState<Filter>("all")
-  const [active, setActive] = useState("")
-
   const inputRef = useRef<HTMLInputElement>(null)
 
+  const [filter, setFilter] = useState<Filter>(initialFilter)
+  const [active, setActive] = useState("")
+
   const q = useDebouncedValue(query.trim(), 120)
-  const { data, isPending, isError, isFetching } = useSearchResults(q, filter)
+  const { data, isPending, isError, isFetching } = useSearchResults(
+    q,
+    filter,
+    mission?.id ?? null
+  )
 
   const groups = useMemo(() => data?.groups ?? [], [data])
   const counts = data?.counts ?? {}
@@ -75,24 +83,55 @@ const SearchPanel = () => {
 
   const activeHit = hitsByKey.get(active)
 
-  const openHit = (hit: SearchHit, newTab = false) => {
-    const href = hrefOf(hit)
+  const [shownGroups, setShownGroups] = useState(groups)
+  if (groups !== shownGroups) {
+    setShownGroups(groups)
 
-    if (newTab) {
-      window.open(href, "_blank", "noopener")
-      return
+    if (!hitsByKey.has(active)) {
+      const first = groups.find((g) => g.hits.length > 0)
+      setActive(first ? hitKey(first.key, first.hits[0]) : "")
     }
+  }
 
+  const focusInput = () => inputRef.current?.focus()
+
+  const selectFilter = (next: Filter) => {
+    setFilter(next)
+    focusInput()
+  }
+
+  /** ↵ on a mission: attach it as the chip and start a fresh search inside it (menu stays open). */
+  const searchInMission = (hit: SearchHit) => {
+    attachMission(hit)
+    setQuery("")
+    setFilter("all")
+    focusInput()
+  }
+
+  /** ↵ on anything else (or a preview action): go there, and the breadcrumb follows. */
+  const go = (hit: SearchHit, href = hrefOf(hit)) => {
+    moveBreadcrumbTo(hit)
     closeMenu()
     navigate({ href })
   }
 
+  const selectHit = (hit: SearchHit) =>
+    hit.module === "mission" ? searchInMission(hit) : go(hit)
+
+  // Ctrl+↵ opens the highlighted hit in a new tab.
   const onKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "Enter" && (e.metaKey || e.ctrlKey) && activeHit) {
       e.preventDefault()
-      openHit(activeHit, true)
+      window.open(hrefOf(activeHit), "_blank", "noopener")
     }
   }
+
+  const where = [
+    filter === "all" ? "" : MODULE_REGISTRY[filter].label.toLowerCase(),
+    mission?.id,
+  ]
+    .filter(Boolean)
+    .join(" · ")
 
   const emptyMessage = isError ? (
     "Search is unavailable right now."
@@ -102,7 +141,7 @@ const SearchPanel = () => {
       Searching...
     </span>
   ) : q ? (
-    `No results for "${q}"${filter === "all" ? "" : ` in ${MODULE_REGISTRY[filter].label.toLowerCase()}`}`
+    `No results for "${q}"${where ? ` in ${where}` : ""}`
   ) : (
     "Nothing created yet."
   )
@@ -121,18 +160,21 @@ const SearchPanel = () => {
         ref={inputRef}
         value={query}
         onValueChange={setQuery}
-        placeholder="Search missions, campaigns, runs, channels..."
+        mission={mission}
+        onClearMission={clearMission}
+        placeholder={
+          mission
+            ? "Search this mission..."
+            : "Search missions, campaigns, runs, channels..."
+        }
       />
 
       {/* row 2: filter */}
       <ToggleGroup
         value={[filter]}
-        onValueChange={(v) => {
-          const next = v[0] as Filter | undefined
-          if (!next) return
-
-          setFilter(next)
-          inputRef.current?.focus()
+        onValueChange={(pressed) => {
+          const next = pressed[0]
+          if (isFilter(next)) selectFilter(next)
         }}
         onKeyDown={keepKeysLocal}
         orientation="horizontal"
@@ -181,16 +223,19 @@ const SearchPanel = () => {
                     )}
                   </span>
                 }
-                className="**:[[cmdk-group-heading]]:text-text-mute px-1.5 **:[[cmdk-group-heading]]:px-2.5 **:[[cmdk-group-heading]]:pt-2 **:[[cmdk-group-heading]]:pb-1 **:[[cmdk-group-heading]]:text-[11px] **:[[cmdk-group-heading]]:tracking-widest"
+                className="px-1.5 **:[[cmdk-group-heading]]:px-2.5 **:[[cmdk-group-heading]]:pt-2 **:[[cmdk-group-heading]]:pb-1 **:[[cmdk-group-heading]]:text-[11px] **:[[cmdk-group-heading]]:tracking-widest **:[[cmdk-group-heading]]:text-mute"
               >
                 {group.hits.map((hit) => (
                   <CommandItem
                     key={hitKey(group.key, hit)}
                     value={hitKey(group.key, hit)}
-                    onSelect={() => openHit(hit)}
-                    className="gap-2.5 rounded-md px-2.5 py-1.5"
+                    onSelect={() => selectHit(hit)}
+                    className="group cursor-pointer gap-2.5 rounded-md px-2.5 py-1.5"
                   >
                     <HitRow row={rowOf(hit)} />
+                    <Kbd className="invisible font-mono text-[11px] group-data-[selected=true]:visible">
+                      ↵
+                    </Kbd>
                   </CommandItem>
                 ))}
 
@@ -198,8 +243,8 @@ const SearchPanel = () => {
                 {module && hidden > 0 && (
                   <CommandItem
                     value={`${group.key}:show-all`}
-                    onSelect={() => setFilter(module)}
-                    className="gap-2 rounded-md px-2.5 py-1.5 text-xs text-nominal-fg"
+                    onSelect={() => selectFilter(module)}
+                    className="cursor-pointer gap-2 rounded-md px-2.5 py-1.5 text-xs text-nominal-fg"
                   >
                     Show all {groupTotal}{" "}
                     {MODULE_REGISTRY[module].label.toLowerCase()}
@@ -217,16 +262,11 @@ const SearchPanel = () => {
           onKeyDown={keepKeysLocal}
         >
           {activeHit ? (
-            <>
-              <PreviewHeader
-                row={rowOf(activeHit)}
-                onOpen={() => openHit(activeHit)}
-              />
-              <PreviewOf
-                key={`${activeHit.module}:${activeHit.id}`}
-                hit={activeHit}
-              />
-            </>
+            <SearchPreview
+              key={`${activeHit.module}:${activeHit.id}`}
+              hit={activeHit}
+              onOpen={(href) => go(activeHit, href)}
+            />
           ) : (
             <p className="text-sm text-mute">
               Highlight a result to preview it.

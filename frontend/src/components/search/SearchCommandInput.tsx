@@ -2,7 +2,6 @@ import type { Crumb } from "@/lib/search/types"
 import { cn } from "@/lib/utils"
 import { Command as CommandPrimitive } from "cmdk"
 import { SearchIcon, X } from "lucide-react"
-import { Button } from "../ui/button"
 import {
   InputGroup,
   InputGroupAddon,
@@ -11,7 +10,7 @@ import {
 
 type Props = React.ComponentProps<typeof CommandPrimitive.Input> & {
   mission?: Crumb | null
-  onClearMission?: () => null
+  onClearMission?: () => void
 }
 
 const SearchCommandInput = ({
@@ -39,7 +38,7 @@ const SearchCommandInput = ({
               title={mission.name}
             >
               {mission.id}
-              <Button
+              <button
                 type="button"
                 aria-label="Search all missions"
                 tabIndex={-1}
@@ -48,7 +47,7 @@ const SearchCommandInput = ({
                 className="cursor-pointer rounded p-0.5 hover:text-text"
               >
                 <X className="size-3" />
-              </Button>
+              </button>
             </div>
           </InputGroupAddon>
         )}
@@ -81,7 +80,7 @@ const SearchCommandInput = ({
             tabIndex={-1}
             onMouseDown={(e) => e.preventDefault()}
             onClick={() => onValueChange?.("")}
-            className="text-mute hover:text-text"
+            className="cursor-pointer text-mute hover:text-text"
           >
             <X />
           </InputGroupButton>

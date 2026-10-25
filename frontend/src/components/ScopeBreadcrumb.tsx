@@ -14,10 +14,12 @@ const ScopeBreadcrumb = () => {
     return (
       <Button
         variant="ghost"
-        onClick={() => openMenu("", "mission")}
+        onClick={() => openMenu("", "all")}
         className={SEGMENT}
       >
-        All missions
+        <span className="[text-box:trim-both_cap_alphabetic]">
+          All missions
+        </span>
         <ChevronDown className="size-3 text-mute" />
       </Button>
     )
@@ -41,7 +43,9 @@ const ScopeBreadcrumb = () => {
               {last && crumb.chip && (
                 <span className={cn("size-2 rounded-xs", crumb.chip)} />
               )}
-              {crumb.id}
+              <span className="[text-box:trim-both_cap_alphabetic]">
+                {crumb.id}
+              </span>
               <ChevronDown className="size-3 text-mute" />
             </Button>
           </Fragment>

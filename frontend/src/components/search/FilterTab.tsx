@@ -11,7 +11,7 @@ const FilterTab = ({ value, label, count }: Props) => {
   return (
     <ToggleGroupItem
       value={value}
-      className="h-7 min-w-0 flex-none gap-1.5 rounded-md px-2.5 text-[13px] font-normal text-muted-foreground first:rounded-md last:rounded-md hover:bg-transparent hover:text-text data-[state=on]:bg-accent data-[state=on]:text-text"
+      className="h-7 min-w-0 flex-none cursor-pointer gap-1.5 rounded-md px-2.5 text-[13px] font-normal text-muted-foreground first:rounded-md last:rounded-md hover:bg-transparent hover:text-text data-[state=on]:bg-accent data-[state=on]:text-text"
     >
       {label}
       {count !== undefined && (

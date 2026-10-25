@@ -113,6 +113,14 @@ export type ModuleSpec<M extends ModuleFormat> = {
 export type PreviewData = {
   facts: { k: string; v: string; tone?: Tone }[]
   note?: string
-  series?: { label: string; value: string; values: number[] }
+  series?: {
+    label: string
+    value: string
+    values: number[]
+    warn?: number
+    limit?: number
+    inverted?: boolean
+  }
   coverage?: number[]
+  actions?: { label: string; href: string; key?: string }[]
 }
