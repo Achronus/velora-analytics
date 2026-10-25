@@ -2,6 +2,8 @@ export type ID = string
 export type ISODate = string
 export type Param = number | string | boolean
 
+export type LiveStatus = "running" | "idle" | "offline"
+
 export type ModuleFormat =
   | "mission"
   | "campaign"
