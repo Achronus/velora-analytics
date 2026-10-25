@@ -1,4 +1,4 @@
-import { searchMock } from "@/lib/data"
+import { searchMock } from "@/lib/data/search"
 import type { SearchResponse } from "@/lib/search/types"
 import type { Filter } from "@/lib/types"
 import { keepPreviousData, useQuery } from "@tanstack/react-query"

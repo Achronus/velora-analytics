@@ -1,4 +1,4 @@
-import { previewMock } from "@/lib/data"
+import { previewMock } from "@/lib/data/search"
 import type { PreviewData } from "@/lib/search/types"
 import type { ID, ModuleFormat } from "@/lib/types"
 import { useQuery } from "@tanstack/react-query"

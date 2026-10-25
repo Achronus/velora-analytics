@@ -5,7 +5,7 @@ import { badgeVariants } from "./ui/badge"
 
 type Recents = {
   id: string
-  colour: string
+  chip: string
 }
 
 type HeroProps = {
@@ -35,7 +35,7 @@ const Hero = ({ recents }: HeroProps) => {
               "text-text-dim gap-1.5 rounded-full px-2.5 py-1 font-mono font-normal hover:text-text"
             )}
           >
-            <span className={cn("size-1.75 rounded-xs", q.colour)} />
+            <span className={cn("size-1.75 rounded-xs", q.chip)} />
             {q.id}
           </Link>
         ))}

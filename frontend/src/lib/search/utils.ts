@@ -1,6 +1,6 @@
 import type { ISODate, ModuleFormat } from "@/lib/types"
 import type { Crumb, HitOf } from "./types"
-import { PATH_SEGMENT, RUN_COLOURS } from "./constants"
+import { PATH_SEGMENT } from "../constants"
 
 export const formatTimeAgo = (iso: ISODate): string => {
   const s = (Date.now() - new Date(iso).getTime()) / 1000
@@ -31,12 +31,6 @@ export const toCrumb = <M extends ModuleFormat>(h: HitOf<M>): Crumb => ({
   id: h.id,
   name: h.name,
 })
-
-export const runColourClass = (id: string) => {
-  let h = 0
-  for (const ch of id) h = (h * 31 + ch.charCodeAt(0)) | 0
-  return RUN_COLOURS[Math.abs(h) % RUN_COLOURS.length]
-}
 
 export const formatMillion = (value: number) => {
   return `${(value / 1e6).toFixed(0)}M`

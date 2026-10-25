@@ -5,10 +5,10 @@ import {
   formatParentIds,
   formatPercent,
   formatTimeAgo,
-  runColourClass,
   toCrumb,
 } from "@/lib/search/utils"
-import { LEVEL_CHIP, LEVEL_TONE, OUTCOME_TONE, STATUS_TONE } from "./constants"
+import { runColourClass } from "../utils"
+import { LEVEL_CHIP, LEVEL_TONE, STATUS_TONE } from "../constants"
 import {
   type HitOf,
   type ModuleSpec,
@@ -16,6 +16,7 @@ import {
   type SearchHit,
 } from "./types"
 import { preview } from "@/components/search/FactsPreview"
+import { OUTCOME_TONE } from "../constants"
 
 export const MODULE_REGISTRY: { [M in ModuleFormat]: ModuleSpec<M> } = {
   mission: {
