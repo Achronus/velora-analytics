@@ -1,4 +1,5 @@
 import HeroSearch from "@/components/HeroSearch"
+import { PageLayout } from "@/components/layout/PageLayout"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/")({
@@ -14,8 +15,8 @@ const RECENTS = [
 
 function HomePage() {
   return (
-    <main className="mx-auto flex max-w-7xl flex-col gap-5 px-8 pt-9 pb-8">
+    <PageLayout className="mt-6">
       <HeroSearch recents={RECENTS} />
-    </main>
+    </PageLayout>
   )
 }

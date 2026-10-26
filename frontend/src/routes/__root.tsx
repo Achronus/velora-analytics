@@ -12,7 +12,9 @@ function RootComponent() {
     <>
       <SearchMenuProvider>
         <SiteHeader />
-        <Outlet />
+        <main id="main">
+          <Outlet />
+        </main>
         <SearchDialog />
       </SearchMenuProvider>
     </>

@@ -5,6 +5,7 @@ import type {
   ModuleFormat,
   NavItems,
   RunStatus,
+  StatTone,
 } from "./types"
 
 export const NAV_ITEMS: NavItems[] = [
@@ -89,4 +90,21 @@ export const PATH_SEGMENT: Partial<Record<ModuleFormat, string>> = {
   campaign: "c",
   run: "r",
   episode: "e",
+}
+
+export const ROW_SIZE = {
+  wider: "flex-[3_1_760px]",
+  wide: "flex-[1.6_1_600px]",
+  half: "flex-[1_1_480px]",
+  narrow: "flex-[1_1_360px]",
+  full: "basis-full",
+}
+
+export const STAT_VALUE_TONE: Record<StatTone, string> = {
+  nominal: "text-nominal-fg",
+  warn: "text-warn-fg",
+  alarm: "text-alarm-fg",
+  live: "text-live-fg",
+  model: "text-model",
+  neutral: "text-text",
 }

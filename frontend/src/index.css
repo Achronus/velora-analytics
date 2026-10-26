@@ -7,6 +7,7 @@
 @import "@fontsource-variable/raleway";
 
 @custom-variant dark (&:where(:root, :root *));
+@custom-variant with-sidebar (&:has(> [data-slot=page-sidebar]));
 
 @source inline("bg-run-{1..6}");
 
