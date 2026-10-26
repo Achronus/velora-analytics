@@ -12,7 +12,7 @@ type HeroProps = {
   recents: Recents[]
 }
 
-const Hero = ({ recents }: HeroProps) => {
+const HeroSearch = ({ recents }: HeroProps) => {
   return (
     <div className="flex flex-col items-center gap-3.5 py-2">
       {/* Title */}
@@ -44,4 +44,4 @@ const Hero = ({ recents }: HeroProps) => {
   )
 }
 
-export default Hero
+export default HeroSearch

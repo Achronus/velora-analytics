@@ -1,4 +1,4 @@
-import Hero from "@/components/Hero"
+import HeroSearch from "@/components/HeroSearch"
 import { createFileRoute } from "@tanstack/react-router"
 
 export const Route = createFileRoute("/")({
@@ -15,7 +15,7 @@ const RECENTS = [
 function HomePage() {
   return (
     <main className="mx-auto flex max-w-7xl flex-col gap-5 px-8 pt-9 pb-8">
-      <Hero recents={RECENTS} />
+      <HeroSearch recents={RECENTS} />
     </main>
   )
 }
