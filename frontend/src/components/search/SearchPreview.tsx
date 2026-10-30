@@ -3,7 +3,7 @@ import { rowOf } from "@/lib/search/registry"
 import type { SearchHit, Tone } from "@/lib/search/types"
 import { cn } from "@/lib/utils"
 import Coverage from "../charts/Coverage"
-import Spark from "../charts/Spark"
+import LineGraph from "../charts/LineGraph"
 import { Button } from "../ui/button"
 import { Kbd } from "../ui/kbd"
 import Chip from "./Chip"
@@ -48,7 +48,17 @@ const SearchPreview = ({ hit, onOpen }: Props) => {
 
       {data && (
         <>
-          {data.series && <Spark series={data.series} />}
+          {data.series && (
+            <LineGraph
+              points={data.series.values}
+              label={data.series.label}
+              value={data.series.value}
+              warn_limit={data.series.warn}
+              danger_limit={data.series.limit}
+              inverted={data.series.inverted}
+              className="h-22.5 rounded-md border border-line bg-background"
+            />
+          )}
           {data.coverage && <Coverage cells={data.coverage} />}
 
           {data.facts.length > 0 && (
