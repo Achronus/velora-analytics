@@ -1,7 +1,5 @@
 import useSearchResults from "@/hooks/search/useSearchResults"
 import { useSearchScope } from "@/hooks/search/useSearchScope"
-import useSearchResults from "@/hooks/useSearchResults"
-import { useSearchScope } from "@/hooks/useSearchScope"
 import {
   hitKey,
   hrefOf,
@@ -9,8 +7,6 @@ import {
   MODULE_REGISTRY,
   rowOf,
 } from "@/lib/registry"
-import type { SearchHit } from "@/lib/search/types"
-import type { Filter, ModuleFormat } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { useLocation, useNavigate } from "@tanstack/react-router"
 import {
@@ -22,8 +18,7 @@ import {
 } from "@velora/components"
 import { useDebouncedValue, useSearchMenu } from "@velora/components/hooks"
 import { ArrowRight, LoaderCircle } from "lucide-react"
-import { useMemo, useRef, useState } from "react"
-import FilterTab from "./search/FilterTab"
+import { Fragment, useMemo, useRef, useState } from "react"
 import HitRow from "./search/HitRow"
 import SearchCommandInput from "./search/SearchCommandInput"
 import SearchPreview from "./search/SearchPreview"
@@ -41,14 +36,10 @@ import {
   DialogHeader,
   DialogTitle,
 } from "./ui/dialog"
-import { Kbd } from "./ui/kbd"
-import { ToggleGroup } from "./ui/toggle-group"
+import { Kbd, KbdGroup } from "./ui/kbd"
 
 const isModule = (key: string): key is ModuleFormat =>
   (MODULE_ORDER as string[]).includes(key)
-
-const isFilter = (v: string | undefined): v is Filter =>
-  v === "all" || (v !== undefined && isModule(v))
 
 const keepKeysLocal = (e: React.KeyboardEvent) => {
   if (
@@ -162,6 +153,19 @@ const SearchPanel = () => {
     "Nothing created yet."
   )
 
+  const keybinds: KeyBind[] = [
+    { hotkey: "↑↓", name: "move" },
+    { hotkey: "↵", name: "open" },
+    {
+      hotkey: "Ctrl ↵",
+      name: "new tab",
+      enabled: !!activeHit,
+      match: (e) => e.key === "Enter" && (e.metaKey || e.ctrlKey),
+      run: () => window.open(hrefOf(activeHit!, hrefCtx), "_blank", "noopener"),
+    },
+    { hotkey: "esc", name: "close" },
+  ]
+
   return (
     <Command
       shouldFilter={false}
@@ -189,9 +193,6 @@ const SearchPanel = () => {
       <FilterToggleGroup
         value={filter}
         onValueChange={selectFilter}
-          const next = pressed[0]
-          if (isFilter(next)) selectFilter(next)
-        }}
         onKeyDown={keepKeysLocal}
         ariaLabel="Filter results"
         options={[
@@ -203,10 +204,6 @@ const SearchPanel = () => {
           })),
         ]}
       />
-            count={data ? (counts[m] ?? 0) : undefined}
-          />
-        ))}
-      </ToggleGroup>
 
       {/* body: results | preview */}
       <div className="flex min-h-130">
@@ -293,12 +290,13 @@ const SearchPanel = () => {
 
       {/* footer */}
       <div className="flex flex-wrap items-center gap-2 border-t px-4 py-2 text-xs text-mute">
-        <div className="ml-auto flex items-center gap-3 font-mono text-[11px]">
-          <Kbd>↑↓</Kbd> move
-          <Kbd>↵</Kbd> open
-          <Kbd>⌘↵</Kbd> new tab
-          <Kbd>esc</Kbd> close
-        </div>
+        <KbdGroup className="ml-auto flex items-center gap-3 font-mono text-[11px]">
+          {keybinds.map((k) => (
+            <Fragment key={k.name}>
+              <Kbd>{k.hotkey}</Kbd> {k.name}
+            </Fragment>
+          ))}
+        </KbdGroup>
       </div>
     </Command>
   )
