@@ -6,15 +6,9 @@
 
    Then swap them to fetch() once /api/v1/search and the preview endpoint are live. */
 
-import { MODULE_ORDER, MODULE_REGISTRY } from "@/lib/search/registry"
-import type {
-  Crumb,
-  PreviewData,
-  SearchGroup,
-  SearchHit,
-  SearchResponse,
-} from "@/lib/search/types"
-import type { Filter, ModuleFormat } from "@/lib/types"
+import { MODULE_ORDER, MODULE_REGISTRY } from "@/lib/registry"
+import type { Crumb, Filter, ModuleFormat, SearchHit } from "@velora/components"
+import type { PreviewData, SearchGroup, SearchResponse } from "../types"
 
 /* ==========================================================================
    Generators (deterministic, so the data is the same on every load)

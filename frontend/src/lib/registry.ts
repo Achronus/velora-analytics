@@ -7,8 +7,8 @@ import {
   formatTimeAgo,
   toCrumb,
 } from "@/lib/search/utils"
-import { runColourClass } from "../utils"
-import { LEVEL_CHIP, LEVEL_TONE, STATUS_TONE } from "../constants"
+import { runColourClass } from "./utils"
+import { LEVEL_CHIP, LEVEL_TONE, STATUS_TONE } from "./constants"
 import {
   type Crumb,
   type HitOf,
@@ -16,9 +16,9 @@ import {
   type ModuleSpec,
   type RowDisplay,
   type SearchHit,
-} from "./types"
+} from "./search/types"
 import { preview } from "@/components/search/FactsPreview"
-import { OUTCOME_TONE } from "../constants"
+import { OUTCOME_TONE } from "./constants"
 
 export const MODULE_REGISTRY: { [M in ModuleFormat]: ModuleSpec<M> } = {
   mission: {

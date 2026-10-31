@@ -1,19 +1,20 @@
-export type ID = string
-export type ISODate = string
-export type Param = number | string | boolean
+import type {
+  Chip,
+  Crumb,
+  ID,
+  ISODate,
+  ModuleFormat,
+  Param,
+  Pill,
+  SearchHit,
+  Tone,
+} from "@velora/components"
+import type { FC } from "react"
 
-export type LiveStatus = "running" | "idle" | "offline"
-
-export type ModuleFormat =
-  | "mission"
-  | "campaign"
-  | "run"
-  | "agent"
-  | "environment"
-  | "episode"
-  | "channel"
-
-export type Filter = ModuleFormat | "all"
+export type RecentLink = {
+  id: string
+  chip: string
+}
 
 export type Status =
   "success" | "marginal" | "fail" | "running" | "complete" | "active"
@@ -29,6 +30,15 @@ export type NavItems = {
   label: string
   to: string
   live?: boolean
+}
+
+export type RowDisplay = {
+  title: string
+  mono?: boolean
+  name?: string
+  sub: string
+  chip?: Chip
+  pill?: Pill
 }
 
 /* -------- Hierarchy -------- */
@@ -134,3 +144,98 @@ export type Requirement = {
 }
 
 export type RequirementResult = { id: string; met: boolean; observed: number }
+
+/* -------- Search -------- */
+
+export type SearchHitData = {
+  mission: {
+    description?: string
+    campaigns: number
+    episodes: number
+    state: "active" | "spec"
+  }
+  campaign: {
+    description?: string
+    runs: number
+    running: number
+  }
+  run:
+    | {
+        type: "train"
+        status: RunStatus
+        algorithm: string
+        stepsDone: number
+        totalSteps: number
+        successRate?: number
+      }
+    | {
+        type: "eval"
+        status: RunStatus
+        policy: CheckpointRef
+        episodesDone: number
+        episodeCount: number
+        successRate?: number
+        requirements?: { met: number; total: number }
+      }
+  agent: {
+    checkpoint: CheckpointRef
+    algorithm: string
+    promoted?: boolean
+    evaluatedIn: number
+  }
+  environment: {
+    description?: string
+    randomised: number
+    episodes: number
+  }
+  episode: {
+    status: "running" | "done"
+    outcome?: EpisodeOutcome
+    envIndex: number
+    headline?: string
+    startedAt: ISODate
+  }
+  channel: {
+    desc?: string
+    unit?: string
+    source: "env" | "agent" | "reward"
+    level?: 0 | 1 | 2
+    validated?: boolean
+    latestEpisode?: Crumb[]
+  }
+}
+
+export type SearchGroup = { key: string; heading: string; hits: SearchHit[] }
+
+export type SearchResponse = {
+  groups: SearchGroup[]
+  counts: Partial<Record<ModuleFormat, number>>
+}
+
+export type HrefContext = {
+  scope: Crumb[]
+  plotted?: string[]
+}
+
+export type ModuleSpec<M extends ModuleFormat> = {
+  label: string
+  limit: number
+  row: (hit: SearchHit<M>) => RowDisplay
+  href: (hit: SearchHit<M>, ctx: HrefContext) => string
+  Preview: FC<{ hit: SearchHit<M> }>
+}
+
+export type PreviewData = {
+  facts: { k: string; v: string; tone?: Tone }[]
+  note?: string
+  series?: {
+    label: string
+    value: string
+    values: number[]
+    warn?: number
+    limit?: number
+    inverted?: boolean
+  }
+  coverage?: number[]
+  actions?: { label: string; href: string; key?: string }[]
+}

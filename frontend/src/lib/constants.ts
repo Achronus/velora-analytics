@@ -1,11 +1,5 @@
-import type { Tone } from "./search/types"
-import type {
-  EpisodeOutcome,
-  LiveStatus,
-  ModuleFormat,
-  NavItems,
-  RunStatus,
-} from "./types"
+import type { ModuleFormat, Tone } from "@velora/components"
+import type { EpisodeOutcome, NavItems, RunStatus } from "./types"
 
 export const NAV_ITEMS: NavItems[] = [
   { label: "Dashboards", to: "/dashboards" },
@@ -16,12 +10,6 @@ export const NAV_ITEMS: NavItems[] = [
   { label: "Monitoring", to: "/monitoring" },
   { label: "Configs", to: "/configs" },
 ]
-
-export const DOT: Record<LiveStatus, string> = {
-  running: "bg-live-on motion-safe:animate-live",
-  idle: "bg-text-mute",
-  offline: "bg-live-off",
-}
 
 export const COVER_CLASS: Record<string, string> = {
   "3": "bg-nominal/60",
@@ -81,8 +69,14 @@ export const LEVEL_TONE = [
 export const LEVEL_LABEL = ["nominal", "deviating", "over limit"] as const
 export const LEVEL_CHIP = ["bg-line-strong", "bg-warn", "bg-alarm"]
 
-/** Identity colour for runs, campaigns and episodes. */
-export const RUN_COLOURS = [1, 2, 3, 4, 5, 6].map((n) => `bg-run-${n}`)
+export const RUN_COLOURS = [
+  "bg-run-1",
+  "bg-run-2",
+  "bg-run-3",
+  "bg-run-4",
+  "bg-run-5",
+  "bg-run-6",
+]
 
 export const PATH_SEGMENT: Partial<Record<ModuleFormat, string>> = {
   mission: "m",
