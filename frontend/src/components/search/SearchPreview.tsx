@@ -2,8 +2,7 @@ import { useSearchPreview } from "@/hooks/useSearchPreview"
 import { rowOf } from "@/lib/search/registry"
 import type { SearchHit, Tone } from "@/lib/search/types"
 import { cn } from "@/lib/utils"
-import Coverage from "../charts/Coverage"
-import LineGraph from "../charts/LineGraph"
+import { CellMap, LineGraph } from "@velora/components/charts"
 import { Button } from "../ui/button"
 import { Kbd } from "../ui/kbd"
 import Chip from "./Chip"
@@ -59,7 +58,13 @@ const SearchPreview = ({ hit, onOpen }: Props) => {
               className="h-22.5 rounded-md border border-line bg-background"
             />
           )}
-          {data.coverage && <Coverage cells={data.coverage} />}
+          {data.coverage && (
+            <CellMap
+              caption="coverage · closing speed × detection range"
+              cells={data.coverage}
+              ariaLabel="success rate by closing speed and detection range"
+            />
+          )}
 
           {data.facts.length > 0 && (
             <dl className="grid grid-cols-2 gap-px overflow-hidden rounded-lg border bg-line">

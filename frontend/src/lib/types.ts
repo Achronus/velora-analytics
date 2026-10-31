@@ -23,9 +23,6 @@ export type RunStatus =
 
 export type EpisodeOutcome = "success" | "marginal" | "fail" | "sim_fault"
 
-export type StatTone =
-  "nominal" | "warn" | "alarm" | "live" | "model" | "neutral"
-
 export type CheckpointRef = { runId: ID; step: number }
 
 export type NavItems = {
