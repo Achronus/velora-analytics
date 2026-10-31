@@ -1,15 +1,9 @@
-import { cn } from "@/lib/utils"
-import { Link } from "@tanstack/react-router"
-import SearchBar from "./SearchBar"
-import { badgeVariants } from "./ui/badge"
-
-type Recents = {
-  id: string
-  chip: string
-}
+import type { RecentLink } from "@/lib/types"
+import { SearchBar } from "@velora/components/search"
+import RecentLinks from "./RecentLinks"
 
 type HeroProps = {
-  recents: Recents[]
+  recents: RecentLink[]
 }
 
 const HeroSearch = ({ recents }: HeroProps) => {
@@ -19,27 +13,8 @@ const HeroSearch = ({ recents }: HeroProps) => {
       <div className="font-mono text-xs tracking-wider text-mute uppercase">
         Velora Analytics
       </div>
-
-      {/* Search bar */}
       <SearchBar size="lg" className="w-full max-w-180" />
-
-      {/* Recent items */}
-      <div className="flex flex-wrap items-center justify-center gap-2 text-xs text-mute">
-        Recent
-        {recents.map((q) => (
-          <Link
-            key={q.id}
-            to="/playback"
-            className={cn(
-              badgeVariants({ variant: "outline" }),
-              "text-text-dim gap-1.5 rounded-full px-2.5 py-1 font-mono font-normal hover:text-text"
-            )}
-          >
-            <span className={cn("size-1.75 rounded-xs", q.chip)} />
-            {q.id}
-          </Link>
-        ))}
-      </div>
+      <RecentLinks caption="Recent" recentItems={recents} />
     </div>
   )
 }

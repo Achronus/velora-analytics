@@ -14,6 +14,7 @@ import type { FC } from "react"
 export type RecentLink = {
   id: string
   chip: string
+  to: string
 }
 
 export type Status =
