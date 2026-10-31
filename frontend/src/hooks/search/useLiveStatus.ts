@@ -1,5 +1,5 @@
-import { useRunningCount } from "@/hooks/useRunningCount"
-import type { LiveStatus } from "@/lib/types"
+import { useRunningCount } from "@/hooks/search/useRunningCount"
+import type { LiveStatus } from "@velora/components"
 
 /**
  * The running count plus the status.

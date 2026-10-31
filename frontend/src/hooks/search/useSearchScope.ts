@@ -1,11 +1,16 @@
-import type { ModuleFormat } from "@/lib/types"
-import { useSearchMenu } from "./useSearchMenu"
-import type { Crumb, SearchHit } from "@/lib/search/types"
+import { useSearchMenu } from "@velora/components/hooks"
 import { useState } from "react"
-import { toCrumb } from "@/lib/search/utils"
-import type { ScopeCrumb } from "@/contexts/SearchMenuContext"
-import { channelTarget, rowOf } from "@/lib/search/registry"
-import { runColourClass } from "@/lib/utils"
+import {
+  toCrumb,
+  runColourClass,
+  type Crumb,
+  type SearchHit,
+  type ModuleFormat,
+} from "@velora/components"
+import { channelTarget, rowOf } from "@/lib/registry"
+import { RUN_COLOURS } from "@/lib/constants"
+
+export type ScopeCrumb = Crumb & { chip?: string }
 
 const BREADCRUMB_LEVELS: ModuleFormat[] = [
   "mission",
@@ -72,7 +77,7 @@ export const useSearchScope = () => {
       setScope(
         target.map((c, i) =>
           i === target.length - 1 && c.module === "episode" && !("chip" in c)
-            ? { ...c, chip: runColourClass(c.id) }
+            ? { ...c, chip: runColourClass(c.id, RUN_COLOURS) }
             : c
         )
       )
