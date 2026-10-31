@@ -1,8 +1,8 @@
-import type { RowDisplay } from "@/lib/search/types"
+import type { RowDisplay } from "@/lib/types"
 import { cn } from "@/lib/utils"
+import { Swatch } from "@velora/components"
 import { ArrowRight } from "lucide-react"
 import { Button } from "../ui/button"
-import Chip from "./Chip"
 import RowPill from "./RowPill"
 
 type Props = {
@@ -15,7 +15,7 @@ const PreviewHeader = ({ row, onOpen }: Props) => {
     <div className="flex items-start gap-3">
       <div className="min-w-0 flex-1">
         <div className="flex items-center gap-2">
-          {row.chip && <Chip chip={row.chip} />}
+          {row.chip && <Swatch chip={row.chip} />}
 
           <span className={cn("truncate text-[15px]", row.mono && "font-mono")}>
             {row.title}

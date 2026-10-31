@@ -1,6 +1,5 @@
-import { useSearchPreview } from "@/hooks/useSearchPreview"
-import type { HitOf } from "@/lib/search/types"
-import type { ID, ModuleFormat } from "@/lib/types"
+import { useSearchPreview } from "@/hooks/search/useSearchPreview"
+import type { ID, ModuleFormat, SearchHit } from "@velora/components"
 import type { FC } from "react"
 
 type Props = {
@@ -9,7 +8,7 @@ type Props = {
 }
 
 export const preview =
-  <M extends ModuleFormat>(): FC<{ hit: HitOf<M> }> =>
+  <M extends ModuleFormat>(): FC<{ hit: SearchHit<M> }> =>
   ({ hit }) => <FactsPreview module={hit.module} id={hit.id} />
 
 const FactsPreview = ({ module, id }: Props) => {

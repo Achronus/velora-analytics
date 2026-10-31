@@ -1,5 +1,6 @@
-import type { RowDisplay, Tone } from "@/lib/search/types"
+import type { RowDisplay } from "@/lib/types"
 import { cn } from "@/lib/utils"
+import type { Tone } from "@velora/components"
 import { Badge } from "../ui/badge"
 
 const PILL: Record<Tone, string> = {

@@ -1,5 +1,5 @@
-import useDebouncedValue from "@/hooks/useDebouncedValue"
-import { useSearchMenu } from "@/hooks/useSearchMenu"
+import useSearchResults from "@/hooks/search/useSearchResults"
+import { useSearchScope } from "@/hooks/search/useSearchScope"
 import useSearchResults from "@/hooks/useSearchResults"
 import { useSearchScope } from "@/hooks/useSearchScope"
 import {
@@ -8,11 +8,19 @@ import {
   MODULE_ORDER,
   MODULE_REGISTRY,
   rowOf,
-} from "@/lib/search/registry"
+} from "@/lib/registry"
 import type { SearchHit } from "@/lib/search/types"
 import type { Filter, ModuleFormat } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { useLocation, useNavigate } from "@tanstack/react-router"
+import {
+  FilterToggleGroup,
+  type Filter,
+  type KeyBind,
+  type ModuleFormat,
+  type SearchHit,
+} from "@velora/components"
+import { useDebouncedValue, useSearchMenu } from "@velora/components/hooks"
 import { ArrowRight, LoaderCircle } from "lucide-react"
 import { useMemo, useRef, useState } from "react"
 import FilterTab from "./search/FilterTab"
@@ -178,23 +186,23 @@ const SearchPanel = () => {
       />
 
       {/* row 2: filter */}
-      <ToggleGroup
-        value={[filter]}
-        onValueChange={(pressed) => {
+      <FilterToggleGroup
+        value={filter}
+        onValueChange={selectFilter}
           const next = pressed[0]
           if (isFilter(next)) selectFilter(next)
         }}
         onKeyDown={keepKeysLocal}
-        orientation="horizontal"
-        aria-label="Filter results"
-        className="w-full flex-wrap justify-start gap-1 border-b px-3 py-2"
-      >
-        <FilterTab value="all" label="All" count={data ? total : undefined} />
-        {MODULE_ORDER.map((m) => (
-          <FilterTab
-            key={m}
-            value={m}
-            label={MODULE_REGISTRY[m].label}
+        ariaLabel="Filter results"
+        options={[
+          { value: "all", label: "All", count: data ? total : undefined },
+          ...MODULE_ORDER.map((m) => ({
+            value: m,
+            label: MODULE_REGISTRY[m].label,
+            count: data ? (counts[m] ?? 0) : undefined,
+          })),
+        ]}
+      />
             count={data ? (counts[m] ?? 0) : undefined}
           />
         ))}

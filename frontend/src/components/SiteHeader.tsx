@@ -1,12 +1,11 @@
-import LiveDot from "@/components/LiveDot"
 import { NAV_ITEMS } from "@/lib/constants"
 
-import { useLiveStatus } from "@/hooks/useLiveStatus"
-import { useSearchMenu } from "@/hooks/useSearchMenu"
+import { useLiveStatus } from "@/hooks/search/useLiveStatus"
 import { Link } from "@tanstack/react-router"
-import RunningButton from "./RunningButton"
-import ScopeBreadcrumb from "./ScopeBreadcrumb"
-import SearchBar from "./SearchBar"
+import { LiveDot, ScopeBreadcrumb } from "@velora/components"
+import { useSearchMenu } from "@velora/components/hooks"
+import { SearchBar } from "@velora/components/search"
+import { IsRunningButton } from "./IsRunningButton"
 
 export const SiteHeader = () => {
   const { setScope } = useSearchMenu()
@@ -22,7 +21,7 @@ export const SiteHeader = () => {
         >
           <img src="/icon-dark.png" alt="Home" className="h-8 w-auto" />
         </Link>
-        <ScopeBreadcrumb />
+        <ScopeBreadcrumb startingLabel="All missions" />
       </div>
 
       <nav aria-label="Primary" className="flex flex-wrap">
@@ -47,7 +46,7 @@ export const SiteHeader = () => {
 
       <div className="ml-auto flex items-center gap-2 py-2">
         <SearchBar size="sm" placeholder="Search" className="w-46" />
-        <RunningButton />
+        <IsRunningButton />
       </div>
     </header>
   )

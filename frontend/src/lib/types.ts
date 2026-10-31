@@ -1,5 +1,5 @@
 import type {
-  Chip,
+  SwatchType,
   Crumb,
   ID,
   ISODate,
@@ -38,7 +38,7 @@ export type RowDisplay = {
   mono?: boolean
   name?: string
   sub: string
-  chip?: Chip
+  chip?: SwatchType
   pill?: Pill
 }
 

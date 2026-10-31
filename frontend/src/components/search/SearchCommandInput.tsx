@@ -1,5 +1,5 @@
-import type { Crumb } from "@/lib/search/types"
 import { cn } from "@/lib/utils"
+import type { Crumb } from "@velora/components"
 import { Command as CommandPrimitive } from "cmdk"
 import { SearchIcon, X } from "lucide-react"
 import {

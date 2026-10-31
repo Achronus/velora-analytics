@@ -1,11 +1,10 @@
-import { useSearchPreview } from "@/hooks/useSearchPreview"
-import { rowOf } from "@/lib/search/registry"
-import type { SearchHit, Tone } from "@/lib/search/types"
+import { useSearchPreview } from "@/hooks/search/useSearchPreview"
+import { rowOf } from "@/lib/registry"
 import { cn } from "@/lib/utils"
+import { Swatch, type SearchHit, type Tone } from "@velora/components"
 import { CellMap, LineGraph } from "@velora/components/charts"
 import { Button } from "../ui/button"
 import { Kbd } from "../ui/kbd"
-import Chip from "./Chip"
 import PreviewSkeleton from "./PreviewSkeleton"
 import RowPill from "./RowPill"
 
@@ -31,7 +30,7 @@ const SearchPreview = ({ hit, onOpen }: Props) => {
     <div className="flex h-full min-h-0 flex-col gap-3.5">
       {/* row 1: title */}
       <div className="flex flex-wrap items-center gap-2.5">
-        {row.chip && <Chip chip={row.chip} className="size-3" />}
+        {row.chip && <Swatch chip={row.chip} className="size-3" />}
         <span className={cn("text-base text-text", row.mono && "font-mono")}>
           {row.title}
         </span>

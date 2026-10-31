@@ -1,12 +1,12 @@
-import type { RowDisplay } from "@/lib/search/types"
+import type { RowDisplay } from "@/lib/types"
 import { cn } from "@/lib/utils"
-import Chip from "./Chip"
+import { Swatch } from "@velora/components"
 import RowPill from "./RowPill"
 
 const HitRow = ({ row }: { row: RowDisplay }) => {
   return (
     <>
-      {row.chip && <Chip chip={row.chip} />}
+      {row.chip && <Swatch chip={row.chip} />}
       <div className="min-w-0 flex-1">
         <div className="flex items-baseline gap-2">
           <span

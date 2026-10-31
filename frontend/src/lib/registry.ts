@@ -1,24 +1,25 @@
-import type { ModuleFormat } from "@/lib/types"
+import {
+  LEVEL_CHIP,
+  LEVEL_TONE,
+  PATH_SEGMENT,
+  RUN_COLOURS,
+  STATUS_TONE,
+} from "./constants"
+import { preview } from "@/components/search/FactsPreview"
+import { OUTCOME_TONE } from "./constants"
 import {
   buildEntityPath,
   formatMillion,
-  formatParentIds,
   formatPercent,
   formatTimeAgo,
+  runColourClass,
   toCrumb,
-} from "@/lib/search/utils"
-import { runColourClass } from "./utils"
-import { LEVEL_CHIP, LEVEL_TONE, STATUS_TONE } from "./constants"
-import {
   type Crumb,
-  type HitOf,
-  type HrefContext,
-  type ModuleSpec,
-  type RowDisplay,
+  type ModuleFormat,
   type SearchHit,
-} from "./search/types"
-import { preview } from "@/components/search/FactsPreview"
-import { OUTCOME_TONE } from "./constants"
+} from "@velora/components"
+import type { HrefContext, ModuleSpec, RowDisplay } from "./types"
+import { formatParentIds } from "./utils"
 
 export const MODULE_REGISTRY: { [M in ModuleFormat]: ModuleSpec<M> } = {
   mission: {
@@ -35,7 +36,7 @@ export const MODULE_REGISTRY: { [M in ModuleFormat]: ModuleSpec<M> } = {
           ? { label: "active", tone: "live" }
           : { label: "spec only", tone: "neutral" },
     }),
-    href: (h) => buildEntityPath([], toCrumb(h)),
+    href: (h) => buildEntityPath([], PATH_SEGMENT, toCrumb(h)),
     Preview: preview<"mission">(),
   },
 
@@ -47,10 +48,10 @@ export const MODULE_REGISTRY: { [M in ModuleFormat]: ModuleSpec<M> } = {
       mono: true,
       name: h.name,
       sub: `${h.data.runs} run${h.data.runs === 1 ? "" : "s"}${h.data.running ? ` . ${h.data.running} running` : ""}`,
-      chip: { className: runColourClass(h.id), shape: "square" },
+      chip: { className: runColourClass(h.id, RUN_COLOURS), shape: "square" },
       pill: h.data.running ? { label: "running", tone: "live" } : undefined,
     }),
-    href: (h) => buildEntityPath(h.path, toCrumb(h)),
+    href: (h) => buildEntityPath(h.path, PATH_SEGMENT, toCrumb(h)),
     Preview: preview<"campaign">(),
   },
 
@@ -72,13 +73,14 @@ export const MODULE_REGISTRY: { [M in ModuleFormat]: ModuleSpec<M> } = {
         mono: true,
         name: h.name,
         sub: [sub, formatParentIds(h.path)].filter(Boolean).join(" · "),
-        chip: { className: runColourClass(h.id), shape: "square" },
+        chip: { className: runColourClass(h.id, RUN_COLOURS), shape: "square" },
         pill: { label: d.status, tone: STATUS_TONE[d.status] },
       }
     },
     href: (h) =>
       buildEntityPath(
         h.path,
+        PATH_SEGMENT,
         toCrumb(h),
         h.data.type === "train" ? "/training" : "/results"
       ),
@@ -100,7 +102,7 @@ export const MODULE_REGISTRY: { [M in ModuleFormat]: ModuleSpec<M> } = {
         .filter(Boolean)
         .join(" · "),
       chip: {
-        className: runColourClass(h.data.checkpoint.runId),
+        className: runColourClass(h.data.checkpoint.runId, RUN_COLOURS),
         shape: "square",
       },
       pill: h.data.promoted
@@ -108,7 +110,12 @@ export const MODULE_REGISTRY: { [M in ModuleFormat]: ModuleSpec<M> } = {
         : undefined,
     }),
     href: (h) =>
-      buildEntityPath(h.path, undefined, `/agents/${encodeURIComponent(h.id)}`),
+      buildEntityPath(
+        h.path,
+        PATH_SEGMENT,
+        undefined,
+        `/agents/${encodeURIComponent(h.id)}`
+      ),
     Preview: preview<"agent">(),
   },
 
@@ -123,6 +130,7 @@ export const MODULE_REGISTRY: { [M in ModuleFormat]: ModuleSpec<M> } = {
     href: (h) =>
       buildEntityPath(
         h.path,
+        PATH_SEGMENT,
         undefined,
         `/environments/${encodeURIComponent(h.id)}`
       ),
@@ -148,7 +156,7 @@ export const MODULE_REGISTRY: { [M in ModuleFormat]: ModuleSpec<M> } = {
         ]
           .filter(Boolean)
           .join(" · "),
-        chip: { className: runColourClass(h.id), shape: "square" },
+        chip: { className: runColourClass(h.id, RUN_COLOURS), shape: "square" },
         pill: running
           ? { label: "running", tone: "live" }
           : d.outcome
@@ -162,6 +170,7 @@ export const MODULE_REGISTRY: { [M in ModuleFormat]: ModuleSpec<M> } = {
     href: (h) =>
       buildEntityPath(
         h.path,
+        PATH_SEGMENT,
         toCrumb(h),
         h.data.status === "running" ? "/live" : "/playback"
       ),
@@ -202,7 +211,7 @@ export const MODULE_REGISTRY: { [M in ModuleFormat]: ModuleSpec<M> } = {
 export const MODULE_ORDER = Object.keys(MODULE_REGISTRY) as ModuleFormat[]
 
 export const getModuleSpec = <M extends ModuleFormat>(
-  hit: HitOf<M>
+  hit: SearchHit<M>
 ): ModuleSpec<M> => MODULE_REGISTRY[hit.module]
 
 export const rowOf = (hit: SearchHit): RowDisplay => getModuleSpec(hit).row(hit)
@@ -214,7 +223,7 @@ export const hitKey = (groupKey: string, hit: SearchHit) =>
   `${groupKey}:${hit.module}:${hit.id}`
 
 export const channelTarget = (
-  h: HitOf<"channel">,
+  h: SearchHit<"channel">,
   { scope, plotted = [] }: HrefContext
 ): { href: string; scope: Crumb[] } => {
   const id = encodeURIComponent(h.id)
@@ -226,13 +235,23 @@ export const channelTarget = (
 
   if (last === "episode")
     return {
-      href: buildEntityPath(here, undefined, `/telemetry${plot(plotted)}`),
+      href: buildEntityPath(
+        here,
+        PATH_SEGMENT,
+        undefined,
+        `/telemetry${plot(plotted)}`
+      ),
       scope: here,
     }
 
   if (last === "run" || last === "campaign")
     return {
-      href: buildEntityPath(here, undefined, `/episodes?channel=${id}`),
+      href: buildEntityPath(
+        here,
+        PATH_SEGMENT,
+        undefined,
+        `/episodes?channel=${id}`
+      ),
       scope: here,
     }
 
@@ -240,12 +259,22 @@ export const channelTarget = (
 
   if (latest?.length)
     return {
-      href: buildEntityPath(latest, undefined, `/telemetry${plot([])}`),
+      href: buildEntityPath(
+        latest,
+        PATH_SEGMENT,
+        undefined,
+        `/telemetry${plot([])}`
+      ),
       scope: latest,
     }
 
   return {
-    href: buildEntityPath(h.path, undefined, `/telemetry${plot([])}`),
+    href: buildEntityPath(
+      h.path,
+      PATH_SEGMENT,
+      undefined,
+      `/telemetry${plot([])}`
+    ),
     scope: h.path,
   }
 }

@@ -1,5 +1,5 @@
-import { getModuleSpec } from "@/lib/search/registry"
-import type { SearchHit } from "@/lib/search/types"
+import { getModuleSpec } from "@/lib/registry"
+import type { SearchHit } from "@velora/components"
 import type { FC } from "react"
 
 const PreviewOf: FC<{ hit: SearchHit }> = ({ hit }) => {
