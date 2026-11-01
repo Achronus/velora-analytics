@@ -12,7 +12,7 @@ export const SiteHeader = () => {
   const { status } = useLiveStatus()
 
   return (
-    <header className="sticky top-0 z-50 flex h-20 gap-5 border-b border-line px-4">
+    <header className="sticky top-0 z-50 flex h-20 gap-5 border-b border-line bg-background px-4">
       <div className="my-4 flex shrink-0 items-center gap-5 border-r pr-5">
         <Link
           to="/"
