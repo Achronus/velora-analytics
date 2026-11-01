@@ -13,7 +13,11 @@ const HeroSearch = ({ recents }: HeroProps) => {
       <div className="font-mono text-xs tracking-wider text-mute uppercase">
         Velora Analytics
       </div>
-      <SearchBar size="lg" className="w-full max-w-180" />
+      <SearchBar
+        size="lg"
+        className="w-full max-w-180"
+        placeholder="Search missions, campaigns, runs, channels..."
+      />
       <RecentLinks caption="Recent" recentItems={recents} />
     </div>
   )
