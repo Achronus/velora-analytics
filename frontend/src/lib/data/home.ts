@@ -1,4 +1,4 @@
-import type { EpisodeOutcome } from "../types"
+import type { BadgeColour, EpisodeOutcome, TileGridRowData } from "../types"
 
 export const RECENTS = [
   { id: "CA-0419", chip: "bg-run-1", to: "/playback" },
@@ -7,38 +7,28 @@ export const RECENTS = [
   { id: "CA-08", chip: "bg-run-5", to: "/playback" },
 ]
 
-export type Outcome = "success" | "marginal" | "fail"
-
-export const OUTCOME: Record<Outcome, { pill: string; text: string }> = {
-  success: { pill: "bg-nominal/15 text-nominal-fg", text: "text-nominal-fg" },
-  marginal: { pill: "bg-warn/15 text-warn-fg", text: "text-warn-fg" },
-  fail: { pill: "bg-alarm/15 text-alarm-fg", text: "text-alarm-fg" },
+export const OUTCOME: Record<EpisodeOutcome, BadgeColour> = {
+  success: {
+    bgColour: "bg-nominal/15 text-nominal-fg",
+    textColour: "text-nominal-fg",
+  },
+  marginal: { bgColour: "bg-warn/15 text-warn-fg", textColour: "text-warn-fg" },
+  fail: { bgColour: "bg-alarm/15 text-alarm-fg", textColour: "text-alarm-fg" },
+  sim_fault: { bgColour: "", textColour: "" },
 }
 
-export type RunningJob = {
-  id: string
-  kind: string
-  chip: string
-  name: string
-  sub: string
-  pct: number
-  line: number[]
-  lineClass?: string
-  warn?: number
-  danger?: number
-  inverted?: boolean
-}
-
-export const RUNNING: RunningJob[] = [
+export const RUNNING: TileGridRowData[] = [
   {
     id: "MC-032",
     kind: "campaign",
     chip: "bg-run-2",
     name: "CA-08 candidate · nominal sweep",
     sub: "383 / 2,000 episodes · 81% success so far · ~1.5 h left",
-    pct: 19.2,
-    // success rate (%) as episodes complete
-    line: [84, 80, 80, 79, 81, 81, 80, 81, 81, 81, 79, 81],
+    graph: {
+      pct: 19.2,
+      // success rate (%) as episodes complete
+      line: [84, 80, 80, 79, 81, 81, 80, 81, 81, 81, 79, 81],
+    },
   },
   {
     id: "CA-08",
@@ -46,9 +36,11 @@ export const RUNNING: RunningJob[] = [
     chip: "bg-run-5",
     name: "PPO + DR · init CA-07 · Velora Base",
     sub: "18M / 40M steps · sim success 86%",
-    pct: 45,
-    // sim success (%) over training
-    line: [45, 45, 50, 53, 61, 66, 73, 76, 81, 81, 84, 84, 86, 86],
+    graph: {
+      pct: 45,
+      // sim success (%) over training
+      line: [45, 45, 50, 53, 61, 66, 73, 76, 81, 81, 84, 84, 86, 86],
+    },
   },
   {
     id: "CA-0419",
@@ -56,13 +48,15 @@ export const RUNNING: RunningJob[] = [
     chip: "bg-run-1",
     name: "Collision avoidance · debris_03 · burn",
     sub: "t = 34 s · predicted miss 15 m → replanning",
-    pct: 21,
-    // predicted miss distance (m): inside the 75 m keep-out
-    line: [15, 15, 15, 15, 15, 15, 18],
-    lineClass: "stroke-alarm",
-    warn: 150,
-    danger: 75,
-    inverted: true,
+    graph: {
+      pct: 21,
+      // predicted miss distance (m): inside the 75 m keep-out
+      line: [15, 15, 15, 15, 15, 15, 18],
+      lineClass: "stroke-alarm",
+      warn: 150,
+      danger: 75,
+      inverted: true,
+    },
   },
 ]
 
