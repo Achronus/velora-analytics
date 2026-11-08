@@ -298,11 +298,15 @@ export type RecentRunsData = {
 }
 
 export type MissionsData = {
+  id: string
   name: string
-  desc: string
+  tagline: string
   tag: string
   active: boolean
   stats: string
+  vehicles: string
+  description?: string
+  dashboardCount: number
 }
 
 export type SystemStatusData = {

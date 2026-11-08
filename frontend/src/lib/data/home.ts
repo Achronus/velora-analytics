@@ -2,7 +2,6 @@ import type {
   AttentionData,
   BadgeColour,
   EpisodeOutcome,
-  MissionsData,
   PinnedData,
   RecentRunsData,
   SystemStatusData,
@@ -204,37 +203,6 @@ export const RECENT: RecentRunsData[] = [
     miss: "172 m",
     campaign: "MC-031",
     when: "40 min ago",
-  },
-]
-
-export const MISSIONS: MissionsData[] = [
-  {
-    name: "Collision avoidance",
-    desc: "sc01 avoiding tracked debris · CW layer · health models",
-    tag: "active",
-    active: true,
-    stats: "5 campaigns · 5,912 runs · last 77.8%",
-  },
-  {
-    name: "Rendezvous and docking",
-    desc: "Nanosat module docking · latch loads",
-    tag: "spec only",
-    active: false,
-    stats: "no runs yet",
-  },
-  {
-    name: "Capture and detumble",
-    desc: "Servicer + 7-DOF arm · tumbling upper stage",
-    tag: "early",
-    active: false,
-    stats: "1 campaign · 48 runs · last early",
-  },
-  {
-    name: "Low-gravity landing",
-    desc: "Powered descent on an irregular body",
-    tag: "spec only",
-    active: false,
-    stats: "no runs yet",
   },
 ]
 

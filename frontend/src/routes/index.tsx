@@ -7,9 +7,9 @@ import {
   TileLinkWithCoverage,
 } from "@/components/TileLink"
 import { Badge } from "@/components/ui/badge"
+import { MISSIONS } from "@/lib/data/core"
 import {
   ATTENTION,
-  MISSIONS,
   OUTCOME,
   PINNED,
   RECENT,
@@ -235,7 +235,7 @@ const MissionsGrid = ({ data }: { data: MissionsData[] }) => {
               {m.tag}
             </span>
           </div>
-          <span className="text-xs text-muted-foreground">{m.desc}</span>
+          <span className="text-xs text-muted-foreground">{m.tagline}</span>
           <span className="mt-1 font-mono text-xs text-mute">{m.stats}</span>
         </TileLink>
       ))}
