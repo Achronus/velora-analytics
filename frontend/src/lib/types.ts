@@ -27,6 +27,8 @@ export type EpisodeOutcome = "success" | "marginal" | "fail" | "sim_fault"
 
 export type CheckpointRef = { runId: ID; step: number }
 
+export type Line = { points: string; className: string; dash?: boolean }
+
 export type NavItems = {
   label: string
   to: string
@@ -239,4 +241,71 @@ export type PreviewData = {
   }
   coverage?: number[]
   actions?: { label: string; href: string; key?: string }[]
+}
+
+export type BadgeColour = {
+  bgColour: string
+  textColour: string
+}
+
+/* -------- API Data Types -------- */
+
+export type GraphData = {
+  pct: number
+  line: number[]
+  lineClass?: string
+  warn?: number
+  danger?: number
+  inverted?: boolean
+}
+
+export type TileGridRowData = {
+  id: string
+  kind: string
+  chip: string
+  name: string
+  sub: string
+  graph?: GraphData
+}
+
+export type AttentionData = {
+  title: string
+  sub: string
+  tag: string
+  level: "alarm" | "warn"
+}
+
+export type PinnedData = {
+  id: string
+  chip: string
+  tagline: string
+  outcome?: EpisodeOutcome
+  coverage?: string
+  metadata?: {
+    description: string
+    requirementsNotMet: number
+  }
+}
+
+export type RecentRunsData = {
+  id: string
+  chip: string
+  name: string
+  outcome: EpisodeOutcome
+  miss: string
+  campaign: string
+  when: string
+}
+
+export type MissionsData = {
+  name: string
+  desc: string
+  tag: string
+  active: boolean
+  stats: string
+}
+
+export type SystemStatusData = {
+  dot: string
+  text: string
 }

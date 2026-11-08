@@ -11,16 +11,18 @@ export const TileLink = createLink(TileAnchor)
 type TileLinkWithCoverageProps = {
   id: string
   to: string
-  coverage: string
+  chip: string
   tagline: string
+  coverage?: string
   children?: React.ReactNode
 }
 
 export const TileLinkWithCoverage = ({
   id,
   to,
-  coverage,
+  chip,
   tagline,
+  coverage,
   children,
 }: TileLinkWithCoverageProps) => {
   return (
@@ -29,16 +31,19 @@ export const TileLinkWithCoverage = ({
         className="grid shrink-0 grid-cols-[repeat(10,7px)] gap-[1.5px]"
         aria-hidden
       >
-        {coverage.split("").map((c, i) => (
-          <span
-            key={i}
-            className={cn("size-1.75 rounded-[1px]", COVER_CLASS[c])}
-          />
-        ))}
+        {coverage &&
+          coverage
+            .split("")
+            .map((c, i) => (
+              <span
+                key={i}
+                className={cn("size-1.75 rounded-[1px]", COVER_CLASS[c])}
+              />
+            ))}
       </div>
       <div className="min-w-0">
         <div className="inline-flex items-center gap-2 font-mono text-sm">
-          <span className="size-2.25 rounded-xs bg-run-1" />
+          <span className={cn("size-2.25 rounded-xs", chip)} />
           {id}
         </div>
         <span className="mt-0.75 block text-[13px] text-text">{tagline}</span>
@@ -57,7 +62,7 @@ type TileLinkWithBadgeProps = {
   to: string
   chip: string
   tagline: string
-  outcome: EpisodeOutcome
+  outcome?: EpisodeOutcome
 }
 
 export const TileLinkWithBadge = ({
@@ -81,16 +86,18 @@ export const TileLinkWithBadge = ({
           {tagline}
         </span>
       </div>
-      <Badge
-        variant="secondary"
-        className={cn(
-          "rounded px-1.75 py-0.5 text-[11px]",
-          OUTCOME[outcome].bgColour,
-          OUTCOME[outcome].textColour
-        )}
-      >
-        {outcome}
-      </Badge>
+      {outcome && (
+        <Badge
+          variant="secondary"
+          className={cn(
+            "rounded px-1.75 py-0.5 text-[11px]",
+            OUTCOME[outcome].bgColour,
+            OUTCOME[outcome].textColour
+          )}
+        >
+          {outcome}
+        </Badge>
+      )}
     </TileLink>
   )
 }

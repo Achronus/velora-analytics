@@ -1,4 +1,13 @@
-import type { BadgeColour, EpisodeOutcome, TileGridRowData } from "../types"
+import type {
+  AttentionData,
+  BadgeColour,
+  EpisodeOutcome,
+  MissionsData,
+  PinnedData,
+  RecentRunsData,
+  SystemStatusData,
+  TileGridRowData,
+} from "../types"
 
 export const RECENTS = [
   { id: "CA-0419", chip: "bg-run-1", to: "/playback" },
@@ -60,12 +69,7 @@ export const RUNNING: TileGridRowData[] = [
   },
 ]
 
-export const ATTENTION: {
-  title: string
-  sub: string
-  tag: string
-  level: "alarm" | "warn"
-}[] = [
+export const ATTENTION: AttentionData[] = [
   {
     title: "REQ-CA-01 not met · MC-031",
     sub: "Keep-out avoidance 96.8% < 99% inside the envelope",
@@ -92,38 +96,34 @@ export const ATTENTION: {
   },
 ]
 
-export const COVERAGE =
-  "3333332221333333222133333322213333332211333333221133333321103333322100333321000033320000003300000000"
-
-export const PINNED: {
-  id: string
-  chip: string
-  name: string
-  outcome: EpisodeOutcome
-}[] = [
+export const PINNED: PinnedData[] = [
+  {
+    id: "MC-031",
+    chip: "bg-run-1",
+    tagline: "CA-07 vs cam_classic · nominal sweep",
+    coverage:
+      "3333332221333333222133333322213333332211333333221133333321103333322100333321000033320000003300000000",
+    metadata: {
+      description: "2,000 runs · 77.8% success ·",
+      requirementsNotMet: 2,
+    },
+  },
   {
     id: "CA-0419",
     chip: "bg-run-1",
-    name: "fragment 0.3 m · 12 m/s · marginal · miss inside 150 m · boom margin 1.70×",
+    tagline:
+      "fragment 0.3 m · 12 m/s · marginal · miss inside 150 m · boom margin 1.70×",
     outcome: "marginal",
   },
   {
     id: "CA-0421",
     chip: "bg-run-3",
-    name: "upper stage 2 m · 18 m/s · boom detached during burn",
+    tagline: "upper stage 2 m · 18 m/s · boom detached during burn",
     outcome: "fail",
   },
 ]
 
-export const RECENT: {
-  id: string
-  chip: string
-  name: string
-  outcome: EpisodeOutcome
-  miss: string
-  campaign: string
-  when: string
-}[] = [
+export const RECENT: RecentRunsData[] = [
   {
     id: "CA-0419",
     chip: "bg-run-1",
@@ -207,7 +207,7 @@ export const RECENT: {
   },
 ]
 
-export const MISSIONS = [
+export const MISSIONS: MissionsData[] = [
   {
     name: "Collision avoidance",
     desc: "sc01 avoiding tracked debris · CW layer · health models",
@@ -238,7 +238,7 @@ export const MISSIONS = [
   },
 ]
 
-export const SYSTEM = [
+export const SYSTEM: SystemStatusData[] = [
   { dot: "bg-live", text: "Sim pool · 112 / 128 envs in use" },
   { dot: "bg-live", text: "Velora Base connected · v0.9" },
   { dot: "bg-live", text: "Telemetry store · 1.8 TB free" },
