@@ -17,6 +17,8 @@ export type RecentLink = {
   to: string
 }
 
+export type CardStatus = "live" | "alarm" | "warn" | "running" | "idle"
+
 export type Status =
   "success" | "marginal" | "fail" | "running" | "complete" | "active"
 
@@ -28,6 +30,7 @@ export type EpisodeOutcome = "success" | "marginal" | "fail" | "sim_fault"
 export type CheckpointRef = { runId: ID; step: number }
 
 export type Line = { points: string; className: string; dash?: boolean }
+export type Band = { y: number; h: number; tone: "warn" | "alarm" }
 
 export type NavItems = {
   label: string
@@ -312,4 +315,20 @@ export type MissionsData = {
 export type SystemStatusData = {
   dot: string
   text: string
+}
+
+export type ViewsFilter = {
+  id: string
+  label: string
+  count: number
+}
+
+export type DashboardData = {
+  name: string
+  run: string
+  type: string
+  status: { label: string; tone: Tone }
+  updated: string
+  pinned: boolean
+  lines: Line[]
 }
