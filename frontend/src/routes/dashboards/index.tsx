@@ -166,7 +166,7 @@ const PageCallout = ({
 const PageSearchBar = ({ filters }: { filters: string[] }) => {
   return (
     <RowContainer>
-      <RowSection className="min-w-0 flex-[999_1_320px]" size="fill">
+      <RowSection size="fill">
         <InputGroup className="h-9.5 bg-panel">
           <InputGroupAddon>
             <Search aria-hidden />
@@ -177,7 +177,7 @@ const PageSearchBar = ({ filters }: { filters: string[] }) => {
           />
         </InputGroup>
       </RowSection>
-      <RowSection className="max-w-full flex-[0_1_auto]" size="auto">
+      <RowSection size="auto">
         <ToggleGroup
           defaultValue={[filters[0]]}
           aria-label="Dashboard type"
