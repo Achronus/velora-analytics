@@ -1,13 +1,4 @@
-import { CalloutAction, CalloutLink } from "@/components/CalloutLink"
-import MultiLineGraph from "@/components/charts/MultiLineGraph"
-import {
-  PageSidebar,
-  PageSidebarGroup,
-  PageSidebarHeading,
-  PageSidebarItemCount,
-  PageSidebarItemLabel,
-  PageSidebarItemMeta,
-} from "@/components/PageSidebar"
+import { CalloutLink } from "@/components/CalloutLink"
 import { PageSidebarItem } from "@/components/PageSidebarItem"
 import { StatusLabel } from "@/components/StatusLabel"
 import { Badge } from "@/components/ui/badge"
@@ -24,7 +15,9 @@ import type { DashboardData, MissionsData, ViewsFilter } from "@/lib/types"
 import { cn } from "@/lib/utils"
 import { createFileRoute, Link } from "@tanstack/react-router"
 import { LiveDot } from "@velora/components"
+import { MultiLineGraph } from "@velora/components/charts"
 import {
+  CalloutAction,
   CalloutDescription,
   CalloutTitle,
   PageHeader,
@@ -32,7 +25,13 @@ import {
   PageHeaderMeta,
   PageHeaderTitle,
   PageLayout,
-  RowLayout,
+  PageSidebar,
+  PageSidebarGroup,
+  PageSidebarHeading,
+  PageSidebarItemCount,
+  PageSidebarItemLabel,
+  PageSidebarItemMeta,
+  RowContainer,
   RowSection,
   Tile,
   TileGrid,
@@ -146,8 +145,8 @@ const PageCallout = ({
   children: React.ReactNode
 }) => {
   return (
-    <RowLayout>
-      <RowSection>
+    <RowContainer>
+      <RowSection size="full">
         <CalloutLink to={to} tone="live">
           <CalloutTitle>
             <LiveDot status="running" />
@@ -160,13 +159,13 @@ const PageCallout = ({
           </CalloutAction>
         </CalloutLink>
       </RowSection>
-    </RowLayout>
+    </RowContainer>
   )
 }
 
 const PageSearchBar = ({ filters }: { filters: string[] }) => {
   return (
-    <RowLayout>
+    <RowContainer>
       <RowSection className="min-w-0 flex-[999_1_320px]" size="fill">
         <InputGroup className="h-9.5 bg-panel">
           <InputGroupAddon>
@@ -196,7 +195,7 @@ const PageSearchBar = ({ filters }: { filters: string[] }) => {
           ))}
         </ToggleGroup>
       </RowSection>
-    </RowLayout>
+    </RowContainer>
   )
 }
 
@@ -272,15 +271,15 @@ function RouteComponent() {
       </PageCallout>
       <PageSearchBar filters={FILTERS} />
 
-      <RowLayout>
-        <RowSection>
+      <RowContainer>
+        <RowSection size="full">
           <TileGrid className="grid-cols-[repeat(auto-fill,minmax(400px,1fr))] gap-3.5">
             {DASHBOARDS.map((d) => (
               <ItemTile key={d.name} {...d} />
             ))}
           </TileGrid>
         </RowSection>
-      </RowLayout>
+      </RowContainer>
     </PageLayout>
   )
 }

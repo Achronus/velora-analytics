@@ -8,6 +8,7 @@ import type {
   Pill,
   SearchHit,
   Tone,
+  Line,
 } from "@velora/components"
 import type { FC } from "react"
 
@@ -28,9 +29,6 @@ export type RunStatus =
 export type EpisodeOutcome = "success" | "marginal" | "fail" | "sim_fault"
 
 export type CheckpointRef = { runId: ID; step: number }
-
-export type Line = { points: string; className: string; dash?: boolean }
-export type Band = { y: number; h: number; tone: "warn" | "alarm" }
 
 export type NavItems = {
   label: string

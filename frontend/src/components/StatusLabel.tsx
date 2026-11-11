@@ -1,5 +1,4 @@
-import { TONE_DOT, TONE_TEXT } from "@/lib/constants"
-import { cn, type Tone } from "@velora/components"
+import { cn, TONE_DOT, TONE_TEXT, type Tone } from "@velora/components"
 import type { ComponentProps } from "react"
 
 export const StatusLabel = ({

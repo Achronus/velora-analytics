@@ -59,24 +59,6 @@ export const STATUS_TONE: Record<RunStatus, Tone> = {
   cancelled: "neutral",
 }
 
-export const TONE_TEXT: Record<Tone, string> = {
-  live: "text-live-fg",
-  nominal: "text-nominal-fg",
-  warn: "text-warn-fg",
-  alarm: "text-alarm-fg",
-  model: "text-model",
-  neutral: "text-muted-foreground",
-}
-
-export const TONE_DOT: Record<Tone, string> = {
-  live: "bg-live motion-safe:animate-live",
-  nominal: "bg-nominal",
-  warn: "bg-warn",
-  alarm: "bg-alarm",
-  model: "bg-model",
-  neutral: "bg-line-strong",
-}
-
 export const TONE_PILL: Record<Tone, string> = {
   live: "bg-live/12 text-live-fg",
   nominal: "bg-nominal/15 text-nominal-fg",

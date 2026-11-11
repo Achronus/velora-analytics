@@ -34,7 +34,7 @@ import {
   ListTable,
   ListTableCell,
   PageLayout,
-  RowLayout,
+  RowContainer,
   RowSection,
   RowSectionAction,
   RowSectionContent,
@@ -262,7 +262,7 @@ function HomePage() {
       <HeroSearch recents={RECENTS} />
 
       {/* Row 1 */}
-      <RowLayout>
+      <RowContainer>
         <RowSection size="wide">
           <RowSectionHeader>
             <RowSectionTitle>
@@ -287,10 +287,10 @@ function HomePage() {
             <AttentionListTable data={ATTENTION} />
           </RowSectionContent>
         </RowSection>
-      </RowLayout>
+      </RowContainer>
 
       {/* Row 2 */}
-      <RowLayout>
+      <RowContainer>
         <RowSection size="narrow">
           <RowSectionHeader>
             <RowSectionTitle>Pinned</RowSectionTitle>
@@ -310,11 +310,11 @@ function HomePage() {
             <RecentRunsListTable data={RECENT} />
           </RowSectionContent>
         </RowSection>
-      </RowLayout>
+      </RowContainer>
 
-      {/* Row 3 */}
-      <RowLayout>
-        <RowSection>
+      {/* Row 3: Missions */}
+      <RowContainer>
+        <RowSection size="full">
           <RowSectionHeader>
             <RowSectionTitle>Missions</RowSectionTitle>
             <RowSectionActionLink to="/configs">New run</RowSectionActionLink>
@@ -323,16 +323,16 @@ function HomePage() {
             <MissionsGrid data={MISSIONS} />
           </RowSectionContent>
         </RowSection>
-      </RowLayout>
+      </RowContainer>
 
       {/* Row 4: System status */}
-      <RowLayout>
-        <RowSection>
+      <RowContainer>
+        <RowSection size="full">
           <RowSectionContent>
             <SystemStatusRow data={SYSTEM} />
           </RowSectionContent>
         </RowSection>
-      </RowLayout>
+      </RowContainer>
     </PageLayout>
   )
 }
