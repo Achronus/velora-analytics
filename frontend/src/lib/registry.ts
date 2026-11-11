@@ -5,7 +5,7 @@ import {
   RUN_COLOURS,
   STATUS_TONE,
 } from "./constants"
-import { preview } from "@/components/search/FactsPreview"
+import { preview } from "@/components/dialog/FactsPreview"
 import { OUTCOME_TONE } from "./constants"
 import {
   buildEntityPath,

@@ -19,9 +19,9 @@ import {
 import { useDebouncedValue, useSearchMenu } from "@velora/components/hooks"
 import { ArrowRight, LoaderCircle } from "lucide-react"
 import { Fragment, useMemo, useRef, useState } from "react"
-import HitRow from "./search/HitRow"
-import SearchCommandInput from "./search/SearchCommandInput"
-import SearchPreview from "./search/SearchPreview"
+import HitRow from "./dialog/HitRow"
+import SearchCommandInput from "./dialog/SearchCommandInput"
+import SearchPreview from "./dialog/SearchPreview"
 import {
   Command,
   CommandEmpty,
